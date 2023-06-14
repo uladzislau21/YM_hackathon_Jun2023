@@ -56,12 +56,12 @@ PATH_TO_SAVE_COLUMNS_TARGET = cwd + "/for_docker_images/src/preprocessed_data/ta
 # логирование
 def start_logger():
     logger = logging.getLogger()
-    logger.setLevel(logging.DEBUG)
-    console_handler = logging.StreamHandler()
-    console_handler.setLevel(logging.CRITICAL)
-    FORMATTER = logging.Formatter('%(message)s')
-    console_handler.setFormatter(FORMATTER)
-    logger.addHandler(console_handler)
+    logger.setLevel(logging.CRITICAL)
+    # console_handler = logging.StreamHandler()
+    # console_handler.setLevel(logging.CRITICAL)
+    # FORMATTER = logging.Formatter('%(message)s')
+    # console_handler.setFormatter(FORMATTER)
+    # logger.addHandler(console_handler)
     path_log = os.path.join(cwd, 'Log_Page_Loader.log')
     file_handler = logging.FileHandler(path_log)
     file_handler.setLevel(logging.INFO)
@@ -299,7 +299,7 @@ with FillingSquaresBar(' Прогресс выполнения', max=20) as bar:
     score_all = x_train_predict_fias_n(x_train, x_test, y_test, 3, 10_000)
     column_drop = []
     top_score = score_all
-    for col in tqdm(x_train.columns):
+    for col in x_train.columns:
         column_drop.append(col)
         x_train_new = x_train.copy(deep=True)
         x_test_new = x_test.copy(deep=True)
@@ -320,7 +320,7 @@ with FillingSquaresBar(' Прогресс выполнения', max=20) as bar:
     df_for_classific.drop(column_drop, axis=1, inplace=True)
     df_for_classific.drop(['target'], axis=1, inplace=True)
     ind = x_get_index(df_for_classific)
-    write_index(PATH_TO_SAVE_FAISS)
+    write_index(ind, PATH_TO_SAVE_FAISS)
     logger.info(' Обучен и выгружен индекс FAISS!')
     bar.next()
 
