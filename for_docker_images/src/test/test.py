@@ -35,6 +35,6 @@ data_3 = {"orderId": "unique_order_id",
 
 r_2 = requests.get("http://0.0.0.0:8001/pack", json=data_2)
 print(r_2.json())
-# r_3 = requests.get("http://0.0.0.0:8001/pack", json=data_3)
-# print(r_3.json())
+r_3 = requests.get("http://0.0.0.0:8001/pack", json=data_3)
+print(r_3.json())
 

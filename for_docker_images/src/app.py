@@ -42,7 +42,8 @@ def get_prediction(request: Order):
                                                          preprocessing.tfidf_vectorizer,
                                                          preprocessing.scaler_rb_for_cluster)
     df_order['cluster'] = model.kmeans.predict(df_for_clustering.to_numpy())
-
+    print(df_order.shape)
+    print(df_order.columns)
     dict_sku = {}
     # перебираем кластеры по очереди
     for cluster in sorted(df_order['cluster'].unique()):
