@@ -42,11 +42,7 @@ def get_prediction(request: Order):
                                                          preprocessing.tfidf_vectorizer,
                                                          preprocessing.scaler_rb_for_cluster)
     df_order['cluster'] = model.kmeans.predict(df_for_clustering.to_numpy())
-
-    print(df_order.shape)
-    print(df_order.columns)
     df_order = df_order.reset_index(drop=True)
-    print(df_order)
     list_answer = []
     # перебираем кластеры по очереди
     for cluster in sorted(df_order['cluster'].unique()):
@@ -57,7 +53,6 @@ def get_prediction(request: Order):
         df_cluster = df_cluster.drop('volume', axis=1)
         # сбросим индексы
         df_cluster = df_cluster.reset_index(drop=True)
-        print('1', df_cluster)
         # Создадим словарь с текущей стопкой sku товаров
         list_sku = []
         while df_cluster.shape[0] != 0:
@@ -120,11 +115,9 @@ def get_prediction(request: Order):
                                                                      preprocessing.scaler_rb_for_clusific,
                                                                      model.column_for_drop)
                 # После обхода добавляем в словарь очередной набор
-                print(list_sku)
                 dict_sku[' '.join(map(str, list_sku))] = model.get_fit_predict_list_n(model.index, old_item_for_pred)
                 list_answer.append(dict_sku)
                 list_sku = []
-    print(list_answer)
     return {"orderId": request.orderId,
             "package": list_answer,
             "status": "ok"}
