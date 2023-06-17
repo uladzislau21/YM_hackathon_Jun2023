@@ -31,7 +31,7 @@ def health():
     return {"status": "ok"}
 
 
-@app.get("/pack")
+@app.post("/pack")
 def get_prediction(request: Order):
     items = []
     for el in request.items:
@@ -42,9 +42,12 @@ def get_prediction(request: Order):
                                                          preprocessing.tfidf_vectorizer,
                                                          preprocessing.scaler_rb_for_cluster)
     df_order['cluster'] = model.kmeans.predict(df_for_clustering.to_numpy())
+
     print(df_order.shape)
     print(df_order.columns)
-    dict_sku = {}
+    df_order = df_order.reset_index(drop=True)
+    print(df_order)
+    list_answer = []
     # перебираем кластеры по очереди
     for cluster in sorted(df_order['cluster'].unique()):
         df_cluster = df_order[df_order['cluster'] == cluster]
@@ -54,9 +57,11 @@ def get_prediction(request: Order):
         df_cluster = df_cluster.drop('volume', axis=1)
         # сбросим индексы
         df_cluster = df_cluster.reset_index(drop=True)
+        print('1', df_cluster)
         # Создадим словарь с текущей стопкой sku товаров
         list_sku = []
         while df_cluster.shape[0] != 0:
+            dict_sku = {}
             index_for_drop = [0]  # для записи индексов товаров, которые упакованы
             # делаем текущим айтемом первую строку, добавляем её в текущий список sku
             item = df_cluster.iloc[:1]
@@ -70,10 +75,12 @@ def get_prediction(request: Order):
             # Проверяем не один ли товар в ордере, если один, то предиктим, добавляем в словарь, и выходим из цикла
             if df_cluster.shape[0] == 1:
                 dict_sku[' '.join(map(str, list_sku))] = predict
+                list_answer.append(dict_sku)
                 break
             # Проверяем не был ли товар крупногабаритным по упаковке, если был, то просто добавляем в словарь и дропаем его из датасета
             if model.get_bool_list_ib_list(LIST_BIG_CARTON, predict):
                 dict_sku[' '.join(map(str, list_sku))] = predict
+                list_answer.append(dict_sku)
                 df_cluster = df_cluster[df_cluster.index != 0]
                 df_cluster = df_cluster.reset_index(drop=True)
                 list_sku = []
@@ -113,10 +120,13 @@ def get_prediction(request: Order):
                                                                      preprocessing.scaler_rb_for_clusific,
                                                                      model.column_for_drop)
                 # После обхода добавляем в словарь очередной набор
+                print(list_sku)
                 dict_sku[' '.join(map(str, list_sku))] = model.get_fit_predict_list_n(model.index, old_item_for_pred)
+                list_answer.append(dict_sku)
                 list_sku = []
+    print(list_answer)
     return {"orderId": request.orderId,
-            "package": dict_sku,
+            "package": list_answer,
             "status": "ok"}
 
 
