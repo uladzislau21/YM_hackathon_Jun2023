@@ -16,6 +16,15 @@ data_2 = {"orderId": "unique_order_id",
      "weight": "14.2", "type": ["150", "16"]}
    ]
 }
+# data_2 = {"orderId": "d48f3211c1ffccdc374f23139a9ab668",
+#  "items": [
+#     {"sku": "5f863de7185b639dc6a628704ed17484", "count": 1, "size1": "11.0", "size2": "6.0", "size3": "31.0",
+#      "weight": "0.1", "type": ["290", "600", "610", "950", "970", "980"]},
+#     {"sku": "af49bf330e2cf16e44f0be1bdfe337bd", "count": 17, "size1": "11.0", "size2": "6.0", "size3": "31.0",
+#          "weight": "0.1", "type": ["290", "310", "610", "950", "970", "980"]}
+#    ]
+# }
+
 
 PATH_TO_TEST_DATA_3 = cwd + '/data_for_test/data_for_test_3.csv'
 data_3 = pd.read_csv(PATH_TO_TEST_DATA_3)
@@ -33,8 +42,8 @@ data_3 = {"orderId": "unique_order_id",
           "items": sku}
 
 
-r_2 = requests.get("http://0.0.0.0:8001/pack", json=data_2)
+r_2 = requests.post("http://0.0.0.0:8001/pack", json=data_2)
 print(r_2.json())
-r_3 = requests.get("http://0.0.0.0:8001/pack", json=data_3)
-print(r_3.json())
+# r_3 = requests.get("http://0.0.0.0:8001/pack", json=data_3)
+# print(r_3.json())
 
