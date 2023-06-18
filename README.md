@@ -7,7 +7,7 @@
 # Содержание репозитория:
 
 ## 1. [Блокнот с исследовательским анализом данных](https://github.com/uladzislau21/YM_hackathon_Jun2023/blob/main/yandex_hackathon_eda_by_ds_team_4.ipynb)
-В ноутбуке содержатся выводы, полученные на основе исследовательского анализа данных.
+Проведенн EDA.
 
 ## 2. [Блокнот с предобработкой данных](https://github.com/uladzislau21/YM_hackathon_Jun2023/blob/main/yandex_hackathon_preproseccing_by_ds_team_4.ipynb)
 В данной работе проведена предобработка данных с учетом особенностей выявленных при исследовательском анализе
